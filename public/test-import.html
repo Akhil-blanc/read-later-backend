@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Export Test</title>
+</head>
+<body>
+    <h1>Import/Export Test</h1>
+    <button onclick="testStats()">Test Stats</button>
+    <button onclick="testExport()">Test Export</button>
+    <div id="results"></div>
+
+    <script>
+        async function testStats() {
+            console.log('Testing stats...');
+            try {
+                const response = await fetch('/api/import-export/stats');
+                console.log('Response:', response);
+                const data = await response.json();
+                console.log('Data:', data);
+                document.getElementById('results').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('results').innerHTML = 'Error: ' + error.message;
+            }
+        }
+
+        async function testExport() {
+            console.log('Testing export...');
+            try {
+                const response = await fetch('/api/import-export/export/json');
+                console.log('Export response:', response);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'test-export.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    document.getElementById('results').innerHTML = 'Export successful!';
+                } else {
+                    throw new Error('Export failed');
+                }
+            } catch (error) {
+                console.error('Export error:', error);
+                document.getElementById('results').innerHTML = 'Export error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

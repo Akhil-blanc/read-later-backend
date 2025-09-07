@@ -1,0 +1,30 @@
+{
+  "name": "Read Later",
+  "short_name": "ReadLater",
+  "description": "Save articles to your Obsidian vault",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f5f7",
+  "theme_color": "#007aff",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%23007aff'/%3E%3Ctext x='96' y='120' font-family='system-ui' font-size='60' fill='white' text-anchor='middle'%3E📚%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='64' fill='%23007aff'/%3E%3Ctext x='256' y='320' font-family='system-ui' font-size='160' fill='white' text-anchor='middle'%3E📚%3C/text%3E%3C/svg%3E", 
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

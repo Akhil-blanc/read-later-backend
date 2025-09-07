@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Later</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007aff">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            padding: 20px;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #1d1d1f; font-size: 2rem; margin-bottom: 10px; }
+        .form-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .input-group { margin-bottom: 20px; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #1d1d1f;
+        }
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #e5e5e7; 
+            border-radius: 8px; 
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { 
+            outline: none; 
+            border-color: #007aff; 
+        }
+        .btn { 
+            background: #007aff; 
+            color: white; 
+            border: none; 
+            padding: 14px 24px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #0056b3; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .status { 
+            margin-top: 15px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            text-align: center;
+            font-weight: 500;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background: #d1ecf1; color: #0c5460; border: 1px solid #b8daff; }
+        .quick-add { font-size: 14px; color: #666; text-align: center; margin-bottom: 15px; }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .form-card { padding: 20px; }
+            .header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Read Later</h1>
+            <p>Save articles to your Obsidian vault</p>
+        </div>
+
+        <div class="form-card">
+            <div class="quick-add">
+                💡 Tip: Bookmark this page and share URLs here from your phone
+            </div>
+            
+            <form id="articleForm">
+                <div class="input-group">
+                    <label for="url">Article URL *</label>
+                    <input type="url" id="url" name="url" placeholder="https://example.com/article" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="title">Title (optional)</label>
+                    <input type="text" id="title" name="title" placeholder="Article title will be auto-detected">
+                </div>
+                
+                <div class="input-group">
+                    <label for="tags">Tags (optional)</label>
+                    <input type="text" id="tags" name="tags" placeholder="tech, ai, productivity">
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">
+                    Save Article
+                </button>
+                
+                <div id="status" class="status" style="display: none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+
+        const form = document.getElementById('articleForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
+        const urlInput = document.getElementById('url');
+
+        // Auto-fill from share target parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedUrl = urlParams.get('url') || urlParams.get('text');
+        const sharedTitle = urlParams.get('title');
+        
+        if (sharedUrl) {
+            urlInput.value = sharedUrl;
+        }
+        if (sharedTitle) {
+            document.getElementById('title').value = sharedTitle;
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+        }
+
+        function hideStatus() {
+            status.style.display = 'none';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const url = formData.get('url');
+            const title = formData.get('title');
+            const tags = formData.get('tags');
+            
+            if (!url) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+            showStatus('Extracting article content...', 'loading');
+
+            try {
+                const response = await fetch('/api/articles', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        title: title || undefined,
+                        tags: tags ? tags.split(',').map(t => t.trim()) : undefined
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showStatus('✅ Article saved successfully!', 'success');
+                    form.reset();
+                    
+                    // If this was a shared URL, show success and option to close
+                    if (sharedUrl) {
+                        setTimeout(() => {
+                            showStatus('✅ Saved! You can close this tab now.', 'success');
+                        }, 1500);
+                    }
+                } else {
+                    showStatus(`❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Failed to save article: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Article';
+            }
+        });
+
+        // Clear status when typing
+        urlInput.addEventListener('input', hideStatus);
+    </script>
+</body>
+</html>
