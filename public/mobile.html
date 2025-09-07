@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Save - Read Later</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #1d1d1f; font-size: 1.8rem; margin-bottom: 10px; }
+        .method-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .method-title { 
+            font-size: 1.2rem; 
+            color: #007aff; 
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step { 
+            margin-bottom: 15px; 
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007aff;
+        }
+        .step-number { 
+            font-weight: bold; 
+            color: #007aff; 
+            margin-right: 8px;
+        }
+        .bookmarklet { 
+            display: inline-block;
+            background: #007aff; 
+            color: white; 
+            padding: 12px 20px; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-weight: 600;
+            margin: 10px 0;
+            word-break: break-all;
+            font-size: 14px;
+        }
+        .bookmarklet:hover { background: #0056b3; }
+        .url-display { 
+            background: #e9ecef; 
+            padding: 10px; 
+            border-radius: 6px; 
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .highlight { background: #fff3cd; padding: 2px 4px; border-radius: 3px; }
+        .success { color: #28a745; font-weight: 600; }
+        .quick-form { 
+            background: #e8f4fd; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #1d1d1f; }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 2px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 16px;
+        }
+        input:focus { outline: none; border-color: #007aff; }
+        .btn { 
+            background: #007aff; 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover { background: #0056b3; }
+        .status { 
+            margin-top: 10px; 
+            padding: 10px; 
+            border-radius: 6px; 
+            text-align: center;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .emoji { font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Mobile Save Setup</h1>
+            <p>Choose your preferred method to save articles from your phone</p>
+        </div>
+
+        <!-- Quick Save Form -->
+        <div class="quick-form">
+            <h3 class="method-title">
+                <span class="emoji">⚡</span>
+                Quick Save (Try This First)
+            </h3>
+            <p>Paste any article URL here to save it immediately:</p>
+            
+            <form id="quickSave">
+                <div class="form-group">
+                    <label for="quickUrl">Article URL</label>
+                    <input type="url" id="quickUrl" placeholder="https://example.com/article" required>
+                </div>
+                <button type="submit" class="btn">Save Article</button>
+            </form>
+            <div id="quickStatus" class="status" style="display: none;"></div>
+        </div>
+
+        <!-- Method 1: Bookmark -->
+        <div class="method-card">
+            <h3 class="method-title">
+                <span class="emoji">🔖</span>
+                Method 1: Bookmark (Recommended)
+            </h3>
+            
+            <div class="step">
+                <span class="step-number">1.</span>
+                <strong>Copy this link:</strong>
+                <div class="url-display" id="bookmarkUrl">Loading...</div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2.</span>
+                Add it as a bookmark in your phone browser (Chrome/Safari)
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3.</span>
+                <span class="highlight">When you see an article:</span> Copy the URL → Open the bookmark → Paste and save!
+            </div>
+        </div>
+
+        <!-- Method 2: Share via Copy -->
+        <div class="method-card">
+            <h3 class="method-title">
+                <span class="emoji">📋</span>
+                Method 2: Copy & Paste
+            </h3>
+            
+            <div class="step">
+                <span class="step-number">1.</span>
+                When you find an article, tap <strong>"Share"</strong> → <strong>"Copy link"</strong>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2.</span>
+                Open this page and paste the URL in the Quick Save box above
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3.</span>
+                <span class="success">Article saved to your Obsidian!</span>
+            </div>
+        </div>
+
+        <!-- Method 3: Manual Navigation -->
+        <div class="method-card">
+            <h3 class="method-title">
+                <span class="emoji">🌐</span>
+                Method 3: Direct Navigation
+            </h3>
+            
+            <div class="step">
+                <span class="step-number">1.</span>
+                When reading an article, copy its URL from the address bar
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2.</span>
+                Navigate to: <div class="url-display" id="directUrl">Loading...</div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3.</span>
+                The URL will auto-fill, just tap "Save Article"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get current origin for URLs
+        const currentOrigin = window.location.origin;
+        
+        // Update bookmark URL
+        document.getElementById('bookmarkUrl').textContent = currentOrigin + '/mobile.html';
+        
+        // Update direct URL
+        document.getElementById('directUrl').textContent = currentOrigin;
+        
+        // Handle quick save form
+        document.getElementById('quickSave').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const url = document.getElementById('quickUrl').value;
+            const statusDiv = document.getElementById('quickStatus');
+            const submitBtn = e.target.querySelector('button');
+            
+            if (!url) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+            
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/articles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus('✅ Article saved successfully!', 'success');
+                    document.getElementById('quickUrl').value = '';
+                } else {
+                    showStatus('❌ Error: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Failed to save: ' + error.message, 'error');
+            } finally {
+                submitBtn.textContent = 'Save Article';
+                submitBtn.disabled = false;
+            }
+        });
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('quickStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+            statusDiv.style.display = 'block';
+        }
+        
+        // Auto-fill URL from query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedUrl = urlParams.get('url') || urlParams.get('text');
+        if (sharedUrl) {
+            document.getElementById('quickUrl').value = sharedUrl;
+        }
+    </script>
+</body>
+</html>

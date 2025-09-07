@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const path = require('path');
 const Database = require('./database-json');
 const ObsidianSync = require('./services/obsidian-sync');
 const articlesRouter = require('./routes/articles');
@@ -45,6 +46,10 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'mobile.html'));
+});
+
+app.get('/api', (req, res) => {
   res.json({
     name: 'Read Later API',
     version: '1.0.0',
