@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Floating Read Later Button</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; padding-top: 40px; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95); 
+            color: #333;
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .step { 
+            margin-bottom: 25px; 
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-number { 
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .bookmarklet-link { 
+            display: block;
+            background: #667eea; 
+            color: white; 
+            padding: 15px 20px; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            font-weight: 600;
+            text-align: center;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .bookmarklet-link:hover { 
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .demo { 
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .demo h3 { margin-bottom: 15px; }
+        
+        .highlight { 
+            background: #fff3cd; 
+            color: #856404;
+            padding: 2px 6px; 
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .success { 
+            background: #d4edda; 
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Floating Read Later Button</h1>
+            <p>Get the same scrolling bookmark experience as Windows Chrome!</p>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 20px; color: #667eea;">📱 Setup (Works on Desktop & Mobile)</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Add this bookmark:</strong>
+                <a href="javascript:(function(){if(window.readLaterFloatingButton)return;var script=document.createElement('script');script.src='https://read-later-backend.onrender.com/floating-saver.js';document.head.appendChild(script);})();" 
+                   class="bookmarklet-link">🚀 Enable Floating Button</a>
+                <p style="margin-top:10px; font-size: 14px; opacity: 0.8;">Drag to bookmarks bar (desktop) or bookmark and edit URL (mobile)</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Mobile users:</strong> Copy this code and create a bookmark with it:
+                <div class="code-block" id="bookmarkletCode">javascript:(function(){if(window.readLaterFloatingButton)return;var script=document.createElement('script');script.src='https://read-later-backend.onrender.com/floating-saver.js';document.head.appendChild(script);})();</div>
+                <button class="btn" onclick="copyToClipboard()">📋 Copy Code</button>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>How to use:</strong>
+                <ul style="margin-top: 10px; line-height: 1.6;">
+                    <li>• Go to any article/webpage</li>
+                    <li>• Tap your <span class="highlight">"Enable Floating Button"</span> bookmark</li>
+                    <li>• <strong>Scroll down</strong> - a floating 📚 button appears!</li>
+                    <li>• Tap the floating button to save the article</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <strong>✅ Perfect!</strong> Now you have the exact same experience as the Windows Chrome floating bookmark - it appears when you scroll and saves with one tap!
+            </div>
+        </div>
+
+        <div class="demo">
+            <h3>🎯 What you get:</h3>
+            <ul style="line-height: 1.8; opacity: 0.9;">
+                <li>• <strong>Floating button appears when scrolling</strong> (just like Windows Chrome)</li>
+                <li>• <strong>Beautiful animations</strong> - slides in/out smoothly</li>
+                <li>• <strong>One-tap saving</strong> with visual feedback</li>
+                <li>• <strong>Smart notifications</strong> - shows save status</li>
+                <li>• <strong>Works on any website</strong> - news, blogs, social media</li>
+                <li>• <strong>Auto-syncs to Obsidian</strong> via your plugin</li>
+            </ul>
+        </div>
+
+        <div class="demo">
+            <h3>📱 Mobile Instructions:</h3>
+            <div style="opacity: 0.9; line-height: 1.6;">
+                <p><strong>iPhone Safari:</strong><br>
+                1. Bookmark this page<br>
+                2. Edit bookmark → Replace URL with code above<br>
+                3. Rename to "Enable Read Later"</p>
+                
+                <br>
+                
+                <p><strong>Android Chrome:</strong><br>
+                1. Bookmark this page<br>
+                2. Chrome menu → Bookmarks → Edit<br>
+                3. Replace URL with code above</p>
+                
+                <br>
+                
+                <p><strong>Usage:</strong><br>
+                Visit any article → Tap your "Enable Read Later" bookmark → Scroll to see the floating button!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const code = document.getElementById('bookmarkletCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('📋 Code copied! Create a bookmark and paste this as the URL.');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('📋 Code copied! Create a bookmark and paste this as the URL.');
+            });
+        }
+    </script>
+</body>
+</html>
