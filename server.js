@@ -250,14 +250,13 @@ app.use((error, req, res, next) => {
 
 async function startServer() {
   try {
-    await db.init();
     
     const server = app.listen(PORT, () => {
       logger.info(`🚀 Read Later API server running on http://localhost:${PORT}`);
-      logger.info(`📚 Database: SQLite connected`);
+      logger.info(`📚 Database: JSON file storage ready`);
       logger.info(`🔗 Obsidian sync: ${obsidianSync ? 'Configured' : 'Not configured'}`);
       console.log(`🚀 Read Later API server running on http://localhost:${PORT}`);
-      console.log(`📚 Database: SQLite connected`);
+      console.log(`📚 Database: JSON file storage ready`);
       console.log(`🔗 Obsidian sync: ${obsidianSync ? 'Configured' : 'Not configured'}`);
     });
 

@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const csv = require('csv-parse');
-const ContentExtractor = require('./extractor');
+const ContentExtractor = require('./simple-extractor');
 
 class ImportService {
     constructor(database) {
