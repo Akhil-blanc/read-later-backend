@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Read Later Bookmarklet</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; padding-top: 40px; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .bookmarklet-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            color: #333;
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .step { 
+            margin-bottom: 25px; 
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-number { 
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .bookmarklet-link { 
+            display: block;
+            background: #667eea; 
+            color: white; 
+            padding: 15px 20px; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            font-weight: 600;
+            text-align: center;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            border: 2px solid transparent;
+        }
+        
+        .bookmarklet-link:hover { 
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .bookmarklet-link:active {
+            transform: translateY(0);
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .highlight { 
+            background: #fff3cd; 
+            color: #856404;
+            padding: 2px 6px; 
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .success { 
+            background: #d4edda; 
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .demo-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .demo-section h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2rem; }
+            .bookmarklet-card { padding: 20px; }
+            .step { padding: 15px; }
+            body { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Read Later Bookmarklet</h1>
+            <p>Save any article with one tap - works on desktop and mobile!</p>
+        </div>
+
+        <div class="bookmarklet-card">
+            <h2 style="margin-bottom: 20px; color: #667eea;">📱 Mobile Setup (Recommended)</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Drag this button to your bookmarks bar:</strong>
+                <a href="javascript:(function(){var title=document.title||'';var url=window.location.href;var excerpt=document.querySelector('meta[name=\"description\"]')?document.querySelector('meta[name=\"description\"]').content:'';var popup=document.createElement('div');popup.style.cssText='position:fixed;top:20px;right:20px;background:#667eea;color:white;padding:15px 20px;border-radius:10px;z-index:999999;font-family:system-ui;box-shadow:0 5px 20px rgba(0,0,0,0.3);max-width:300px;';popup.innerHTML='📚 Saving article...';document.body.appendChild(popup);fetch('https://read-later-backend.onrender.com/api/articles',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:url,title:title,excerpt:excerpt})}).then(r=>r.json()).then(d=>{popup.innerHTML=d.success?'✅ Article saved!':'❌ '+d.error;setTimeout(()=>document.body.removeChild(popup),3000)}).catch(e=>{popup.innerHTML='❌ Error: '+e.message;setTimeout(()=>document.body.removeChild(popup),3000)})})();" 
+                   class="bookmarklet-link">📚 Save to Read Later</a>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>On mobile:</strong> Bookmark this page, then edit the bookmark and replace the URL with the code below:
+                <div class="code-block" id="bookmarkletCode">
+javascript:(function(){var title=document.title||'';var url=window.location.href;var excerpt=document.querySelector('meta[name="description"]')?document.querySelector('meta[name="description"]').content:'';var popup=document.createElement('div');popup.style.cssText='position:fixed;top:20px;right:20px;background:#667eea;color:white;padding:15px 20px;border-radius:10px;z-index:999999;font-family:system-ui;box-shadow:0 5px 20px rgba(0,0,0,0.3);max-width:300px;';popup.innerHTML='📚 Saving article...';document.body.appendChild(popup);fetch('https://read-later-backend.onrender.com/api/articles',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:url,title:title,excerpt:excerpt})}).then(r=>r.json()).then(d=>{popup.innerHTML=d.success?'✅ Article saved!':'❌ '+d.error;setTimeout(()=>document.body.removeChild(popup),3000)}).catch(e=>{popup.innerHTML='❌ Error: '+e.message;setTimeout(()=>document.body.removeChild(popup),3000)})})();
+                </div>
+                <button onclick="copyToClipboard()" style="background:#28a745;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin-top:10px;">📋 Copy Code</button>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>How to use:</strong> When you're reading any article, tap your <span class="highlight">"Save to Read Later"</span> bookmark. You'll see a popup confirming it was saved!
+            </div>
+
+            <div class="success">
+                <strong>✅ Perfect!</strong> Now you have the same "one-click save" experience on both desktop and mobile - just like the blue bookmark you see when scrolling in Chrome!
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>🚀 How it works:</h3>
+            <ul style="line-height: 1.8; opacity: 0.9;">
+                <li>• <strong>Instantly saves</strong> the current page to your Read Later collection</li>
+                <li>• <strong>Extracts title and description</strong> automatically</li>
+                <li>• <strong>Shows confirmation popup</strong> - no page reload needed</li>
+                <li>• <strong>Works on any website</strong> - news, blogs, documentation, etc.</li>
+                <li>• <strong>Syncs to Obsidian</strong> via your plugin automatically</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h3>📱 Mobile Instructions:</h3>
+            <div style="opacity: 0.9; line-height: 1.6;">
+                <p><strong>For iPhone (Safari):</strong></p>
+                <p>1. Bookmark this page<br>
+                2. Edit bookmark → Replace URL with the code above<br>
+                3. Rename to "Save to Read Later"</p>
+                
+                <br>
+                
+                <p><strong>For Android (Chrome):</strong></p>
+                <p>1. Bookmark this page<br>
+                2. Chrome menu → Bookmarks → Edit<br>
+                3. Replace URL with the code above</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const code = document.getElementById('bookmarkletCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('📋 Bookmarklet code copied! Now edit your bookmark and paste this as the URL.');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('📋 Bookmarklet code copied! Now edit your bookmark and paste this as the URL.');
+            });
+        }
+    </script>
+</body>
+</html>
