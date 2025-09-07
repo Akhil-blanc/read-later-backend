@@ -1,5 +1,5 @@
 const express = require('express');
-const ContentExtractor = require('../services/extractor');
+const ContentExtractor = require('../services/simple-extractor');
 
 const router = express.Router();
 
